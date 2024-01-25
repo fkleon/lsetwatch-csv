@@ -1,0 +1,34 @@
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lsetwatch-csv"
+version = "0.0.0" # version is currently unused but a required metadata field
+authors = [{ name = "Frederik Leonhardt", email = "frederik@leonhardt.co.nz" }]
+description = "Lsetwatch CSV import/export"
+requires-python = ">=3.10"
+license = { text = "GNU General Public License v3 (GPLv3)" }
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
+
+dependencies = [
+    "dataclass-csv",
+    "pydantic",
+]
+
+[project.optional-dependencies]
+dev = ["ruff ~= 0.1.6", "pytest ~= 7.4"]
+
+[project.urls]
+Repository = "https://github.com/fkleon/TBD"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I001"]
+ignore = ["F401"]
+
+[tool.ruff.isort]
+combine-as-imports = true
