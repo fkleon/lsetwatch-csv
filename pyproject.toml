@@ -25,7 +25,7 @@ dependencies = [
 dev = ["ruff ~= 0.4.5", "pytest ~= 8.2"]
 
 [project.urls]
-Repository = "https://github.com/fkleon/TBD"
+Repository = "https://github.com/fkleon/lsetwatch-csv"
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I001"]
