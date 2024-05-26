@@ -312,7 +312,7 @@ def csv_writer(csvfile, data):
     def encode_item(item: LsetwatchRow) -> LsetwatchRow:
         return dataclasses.replace(
             item,
-            last_edit=datetime.timestamp(item.last_edit),
+            last_edit=int(datetime.timestamp(item.last_edit)),
             mygroup=encode_string(item.mygroup),
             notes=encode_string(item.notes),
             mytags=encode_list(item.mytags),

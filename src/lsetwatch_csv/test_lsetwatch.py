@@ -65,6 +65,11 @@ def temp_file():
         yield file
 
 
+@pytest.fixture
+def now():
+    yield datetime.now()
+
+
 @pytest.mark.parametrize(
     "encoded,decoded",
     [
@@ -399,8 +404,7 @@ def test_write_header(lsetwatch_csvfile, temp_file):
     assert set(lines[0].split(";")) == set(lines_csv[0].split(";"))
 
 
-def test_write_item(temp_file):
-    now = datetime.now()
+def test_write_item(temp_file, now):
     items = [
         LsetwatchRow(
             last_edit=now,
@@ -420,13 +424,12 @@ def test_write_item(temp_file):
     assert len(lines) == 2  # one empty line
     assert (
         lines[0]
-        == f"{now.timestamp()};1;1;0;;0;mygroup;;;;;01/01/2020;;;;;1;;;;20/02/2021;;;;;1;;;;;;;0;0;0;;;;one|two;;10/03/2022;"
+        == f"{int(now.timestamp())};1;1;0;;0;mygroup;;;;;01/01/2020;;;;;1;;;;20/02/2021;;;;;1;;;;;;;0;0;0;;;;one|two;;10/03/2022;"
     )
     pass
 
 
-def test_write_escape(temp_file):
-    now = datetime.now()
+def test_write_escape(temp_file, now):
     items = [
         LsetwatchRow(last_edit=now, number="1", version="1", notes='note with ";"')
     ]
@@ -437,5 +440,5 @@ def test_write_escape(temp_file):
     assert len(lines) == 2  # one empty line
     assert (
         lines[0]
-        == f"{now.timestamp()};1;1;0;;0;;;;;;;;;;;1;;;;;;;;;1;;;;;;;0;0;0;;;note with \a34\a59\a34;;;;"
+        == f"{int(now.timestamp())};1;1;0;;0;;;;;;;;;;;1;;;;;;;;;1;;;;;;;0;0;0;;;note with \a34\a59\a34;;;;"
     )
