@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["ruff ~= 0.1.6", "pytest ~= 7.4"]
+dev = ["ruff ~= 0.4.5", "pytest ~= 8.2"]
 
 [project.urls]
 Repository = "https://github.com/fkleon/TBD"
@@ -31,5 +31,5 @@ Repository = "https://github.com/fkleon/TBD"
 select = ["E4", "E7", "E9", "F", "I001"]
 ignore = ["F401"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true

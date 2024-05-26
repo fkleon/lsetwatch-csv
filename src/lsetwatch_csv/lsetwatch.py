@@ -185,85 +185,81 @@ class LsetwatchRow:
     version: str  # Set-Version
     marker: int = 0  # Nummer des Icons (Zahl zwischen 0 und 31, 0 entspricht ohne)
     # marker = Annotated[int, Field(ge=0, le=31)]
-    color: Optional[
-        str
-    ] = None  # Markierungsfarbe des Sets (als Hex-Farbcode, z.B. #cc0022)
-    template: Optional[
-        LsetTemplate
-    ] = LsetTemplate.FREIE_KONFIGURATION  # Verwendete Vorlage (Zahl zwischen 0 und 5)
+    color: Optional[str] = (
+        None  # Markierungsfarbe des Sets (als Hex-Farbcode, z.B. #cc0022)
+    )
+    template: Optional[LsetTemplate] = (
+        LsetTemplate.FREIE_KONFIGURATION
+    )  # Verwendete Vorlage (Zahl zwischen 0 und 5)
     mygroup: Optional[BellEscapedAsciiString] = None  # Eigene Kategorie
     state: Optional[LsetStatus] = None  # Status des Sets (Zahl zwischen 0 und 12)
-    purc_condition: Optional[
-        LsetPurchaseStatus
-    ] = None  # Zustand bei Kauf (Zahl zwischen 0 und 5)
+    purc_condition: Optional[LsetPurchaseStatus] = (
+        None  # Zustand bei Kauf (Zahl zwischen 0 und 5)
+    )
     purc_platform: Optional[str] = None  # Kaufplattform
     purc_person: Optional[str] = None  # Verkäufer
-    purc_date: Optional[
-        date
-    ] = None  # Kaufdatum (formatiert je nach Einstellung, z.B. 24.12.2021)
+    purc_date: Optional[date] = (
+        None  # Kaufdatum (formatiert je nach Einstellung, z.B. 24.12.2021)
+    )
     purc_number: Optional[str] = None  # Bestellnummer
     purc_price: Optional[float] = None  # Kaufpreis (Dezimalzahl ohne Währungssymbol)
-    purc_shipc: Optional[
-        float
-    ] = None  # Versandkosten (Dezimalzahl ohne Währungssymbol)
+    purc_shipc: Optional[float] = (
+        None  # Versandkosten (Dezimalzahl ohne Währungssymbol)
+    )
     purc_costs: Optional[float] = None  # Zusatzkosten (Dezimalzahl ohne Währungssymbol)
-    purc_items: Optional[
-        int
-    ] = 1  # Anzahl gekaufter Sets für Aufteilung der Versand- und Zusatzkosten (mindestens 1 oder größer)
-    sell_condition: Optional[
-        LsetPurchaseStatus
-    ] = None  # Zustand bei Verkauf (Zahl zwischen 0 und 5)
+    purc_items: Optional[int] = (
+        1  # Anzahl gekaufter Sets für Aufteilung der Versand- und Zusatzkosten (mindestens 1 oder größer)
+    )
+    sell_condition: Optional[LsetPurchaseStatus] = (
+        None  # Zustand bei Verkauf (Zahl zwischen 0 und 5)
+    )
     sell_platform: Optional[str] = None  # Verkaufsplattform
     sell_person: Optional[str] = None  # Käufer
-    sell_date: Optional[
-        date
-    ] = None  # Verkaufsdatum (formatiert je nach Einstellung, z.B. 24.12.2021)
+    sell_date: Optional[date] = (
+        None  # Verkaufsdatum (formatiert je nach Einstellung, z.B. 24.12.2021)
+    )
     sell_number: Optional[str] = None  # Transaktionsnummer
-    sell_price: Optional[
-        float
-    ] = None  # Verkaufspreis (Dezimalzahl ohne Währungssymbol)
-    sell_shipc: Optional[
-        float
-    ] = None  # Versendekosten (Dezimalzahl ohne Währungssymbol)
+    sell_price: Optional[float] = (
+        None  # Verkaufspreis (Dezimalzahl ohne Währungssymbol)
+    )
+    sell_shipc: Optional[float] = (
+        None  # Versendekosten (Dezimalzahl ohne Währungssymbol)
+    )
     sell_costs: Optional[float] = None  # Aufwendungen (Dezimalzahl ohne Währungssymbol)
-    sell_items: Optional[
-        int
-    ] = 1  # Anzahl verkaufter Sets für Aufteilung der Aufwendungen (mindestens 1 oder größer)
+    sell_items: Optional[int] = (
+        1  # Anzahl verkaufter Sets für Aufteilung der Aufwendungen (mindestens 1 oder größer)
+    )
     vip_points_get: Optional[float] = None  # VIP-Punkte erhalten (Dezimalzahl)
     vip_points_sub: Optional[float] = None  # VIP-Punkte eingelöst (Dezimalzahl)
-    cashback: Optional[
-        float
-    ] = None  # Cashback-Betrag (Dezimalzahl ohne Währungssymbol)
-    cashback_type: Optional[
-        LsetCashbackType
-    ] = None  # Cashback-Typ (0 = Prozent vom Kaufpreis, 1 = Als Währungsbetrag, 2 = In Payback-Punkten)
+    cashback: Optional[float] = (
+        None  # Cashback-Betrag (Dezimalzahl ohne Währungssymbol)
+    )
+    cashback_type: Optional[LsetCashbackType] = (
+        None  # Cashback-Typ (0 = Prozent vom Kaufpreis, 1 = Als Währungsbetrag, 2 = In Payback-Punkten)
+    )
     location: Optional[str] = None  # Aufbewahrungsort
     addition: Optional[str] = None  # Zusatzinfo
-    completeness: Optional[
-        LsetInventoryStatus
-    ] = LsetInventoryStatus.OHNE_ANGABE  # Inventar-Status (Zahl zwischen 0 und 4)
-    packaging: Optional[
-        LsetAccessoryStatus
-    ] = (
+    completeness: Optional[LsetInventoryStatus] = (
+        LsetInventoryStatus.OHNE_ANGABE
+    )  # Inventar-Status (Zahl zwischen 0 und 4)
+    packaging: Optional[LsetAccessoryStatus] = (
         LsetAccessoryStatus.NICHT_VORHANDEN
     )  # Zustand der Verpackung (Zahl zwischen 0 und 5)
-    instructions: Optional[
-        LsetAccessoryStatus
-    ] = (
+    instructions: Optional[LsetAccessoryStatus] = (
         LsetAccessoryStatus.NICHT_VORHANDEN
     )  # Zustand der Anleitung (Zahl zwischen 0 und 5)
-    sales_value: Optional[
-        float
-    ] = None  # Verkaufspreis (Dezimalzahl ohne Währungssymbol)
+    sales_value: Optional[float] = (
+        None  # Verkaufspreis (Dezimalzahl ohne Währungssymbol)
+    )
     to_sell: Optional[bool] = None  # Verkauf geplant (0 = Nein, 1 = Ja)
     notes: Optional[BellEscapedAsciiString] = None  # Notizen
     mytags: PipeSeparatedList = dataclasses.field(default_factory=list)
     # Eigene Tags getrennt durch senkrechten Strich |
     documents: PipeSeparatedList = dataclasses.field(default_factory=list)
     # Pfadangaben verlinkter Dokumente getrennt durch senkrechten Strich | (Pfadtrenner: "/")
-    reminder_date: Optional[
-        date
-    ] = None  # Erinnerungsdatum (formatiert je nach Einstellung, z.B. 24.12.2021)
+    reminder_date: Optional[date] = (
+        None  # Erinnerungsdatum (formatiert je nach Einstellung, z.B. 24.12.2021)
+    )
     altern_pieces: Optional[int] = None  # Teilezahl ueberschreiben?
 
 
