@@ -174,7 +174,6 @@ class LsetCashbackType(IntEnum):
 
 
 @dataclasses.dataclass
-@dateformat(DEFAULT_LSET_DATE_FORMAT)
 class LsetwatchRow:
     """
     Lsetwatch CSV format, documented here: http://lebostein.de/lsetwatch/faq_de.html#IEM
@@ -263,11 +262,12 @@ class LsetwatchRow:
     altern_pieces: Optional[int] = None  # Teilezahl ueberschreiben?
 
 
-def csv_reader(csvfile):
-    reader = DataclassReader(csvfile, LsetwatchRow, dialect=LSET_CSV_DIALECT)
+def csv_reader(csvfile, **kwargs):
+    date_format = kwargs.pop("date_format", DEFAULT_LSET_DATE_FORMAT)
 
-    # unix timestamp
-    # reader.type_hints["last_edit"] = lambda s: datetime.utcfromtimestamp(int(s))
+    reader = DataclassReader(
+        csvfile, dateformat(date_format)(LsetwatchRow), dialect=LSET_CSV_DIALECT
+    )
 
     # pipe-separated string lists
     for field in ["mytags", "documents"]:
@@ -292,7 +292,9 @@ def csv_reader(csvfile):
     return reader
 
 
-def csv_writer(csvfile, data):
+def csv_writer(csvfile, data, **kwargs):
+    date_format = kwargs.pop("date_format", DEFAULT_LSET_DATE_FORMAT)
+
     def encode_string(string: str | None) -> str | None:
         return (
             codecs.encode(string, LSET_STRING_ENCODING) if string is not None else None
@@ -302,12 +304,7 @@ def csv_writer(csvfile, data):
         return codecs.encode(list, LSET_LIST_ENCODING) if list is not None else None
 
     def encode_date(date: date | None) -> str | None:
-        format_string = (
-            LsetwatchRow.__dateformat__
-            if LsetwatchRow.__dateformat__ is not None
-            else DEFAULT_LSET_DATE_FORMAT
-        )
-        return date.strftime(format_string) if date is not None else None
+        return date.strftime(date_format) if date is not None else None
 
     def encode_item(item: LsetwatchRow) -> LsetwatchRow:
         return dataclasses.replace(
