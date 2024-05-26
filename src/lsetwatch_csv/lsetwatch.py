@@ -4,7 +4,7 @@ import csv
 import dataclasses
 import locale
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from enum import IntEnum
 from typing import Annotated, Optional
 
@@ -71,7 +71,7 @@ class LsetWatchDialect(csv.Dialect):
 # Custom field types
 class UnixTimestampString(int):
     def __new__(cls, val: str):
-        return datetime.utcfromtimestamp(int(val))
+        return datetime.fromtimestamp(int(val), timezone.utc)
 
 
 class BellEscapedAsciiString(str):

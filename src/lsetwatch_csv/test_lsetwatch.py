@@ -2,7 +2,7 @@ import codecs
 import dataclasses
 import io
 from csv import Dialect, DictReader, register_dialect
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from enum import Enum, IntEnum
 from typing import Annotated, Optional
 
@@ -190,7 +190,7 @@ def test_read_template_free(lsetwatch_csvfile):
             "Z:/Downloads/IMG_20160710_103837.jpg",
         ],
         reminder_date=date(2023, 12, 30),
-        last_edit=datetime.utcfromtimestamp(1702112924),
+        last_edit=datetime.fromtimestamp(1702112924, timezone.utc),
     )
     assert item == expected
 
@@ -243,7 +243,7 @@ def test_read_template_sealed(lsetwatch_csvfile):
         mytags=[],
         documents=[],
         reminder_date=None,
-        last_edit=datetime.utcfromtimestamp(1702113145),
+        last_edit=datetime.fromtimestamp(1702113145, timezone.utc),
     )
     assert item == expected
 
@@ -296,7 +296,7 @@ def test_read_template_sold(lsetwatch_csvfile):
         mytags=[],
         documents=[],
         reminder_date=None,
-        last_edit=datetime.utcfromtimestamp(1702113042),
+        last_edit=datetime.fromtimestamp(1702113042, timezone.utc),
     )
     assert item == expected
 
@@ -349,7 +349,7 @@ def test_read_template_wishlist(lsetwatch_csvfile):
         mytags=[],
         documents=[],
         reminder_date=None,
-        last_edit=datetime.utcfromtimestamp(1702113074),
+        last_edit=datetime.fromtimestamp(1702113074, timezone.utc),
     )
     assert item == expected
 
