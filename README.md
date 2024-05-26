@@ -23,7 +23,11 @@ Values are escaped within the application itself. The value encoding used by Lse
 
 ### Locales, date and number format
 
-The date and decimal number formats are configurable within Lsetwatch. This is not yet implemented in this library and the default British formats are assumed:
+The date and decimal number formats are configurable within Lsetwatch. This is also
+the case in this library and the formats needs to match the values configured within
+Lsetwatch when parsing or generating CSV output.
 
-* Dates: `dd/MM/yyy`.
+If no formats are specified, the following defaults are used:
+
+* Dates: `dd/MM/yyyy`.
 * Decimal numbers: Comma as thousands separator, and period as decimal separator.

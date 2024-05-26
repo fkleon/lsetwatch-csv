@@ -60,6 +60,30 @@ def lsetwatch_csvfile_observed():
 
 
 @pytest.fixture
+def lsetwatch_csvfile_locale_nz():
+    # locale EN_NZ
+    lines = [
+        "number;version;marker;color;template;mygroup;state;purc_condition;purc_platform;purc_person;purc_date;purc_number;purc_price;purc_shipc;purc_costs;purc_items;sell_condition;sell_platform;sell_person;sell_date;sell_number;sell_price;sell_shipc;sell_costs;sell_items;vip_points_get;vip_points_sub;cashback;cashback_type;location;addition;completeness;altern_pieces;packaging;instructions;sales_value;to_sell;notes;mytags;documents;reminder_date;last_edit",
+        "4531;1;;;1;;1;1;;;06/06/2023;;437.71;1.1;0.9;2;;;;;;;;;1;;;;;;;1;;1;1;;;;;;;1702113145",
+    ]
+    content = "\r\n".join(lines)
+    with io.StringIO(content) as file:
+        yield file
+
+
+@pytest.fixture
+def lsetwatch_csvfile_locale_de():
+    # locale DE_DE
+    lines = [
+        "number;version;marker;color;template;mygroup;state;purc_condition;purc_platform;purc_person;purc_date;purc_number;purc_price;purc_shipc;purc_costs;purc_items;sell_condition;sell_platform;sell_person;sell_date;sell_number;sell_price;sell_shipc;sell_costs;sell_items;vip_points_get;vip_points_sub;cashback;cashback_type;location;addition;completeness;altern_pieces;packaging;instructions;sales_value;to_sell;notes;mytags;documents;reminder_date;last_edit",
+        "4531;1;;;1;;1;1;;;06.06.2023;;437,71;1,1;0,9;2;;;;;;;;;1;;;;;;;1;;1;1;;;;;;;1702113145",
+    ]
+    content = "\r\n".join(lines)
+    with io.StringIO(content) as file:
+        yield file
+
+
+@pytest.fixture
 def temp_file():
     with io.StringIO() as file:
         yield file
@@ -142,6 +166,28 @@ def test_read_csv_dialect_dataclass(lsetwatch_csvfile):
     reader = csv_reader(lsetwatch_csvfile)
     items = [*reader]
     assert len(items) == 5
+
+
+def test_read_locale_nz(lsetwatch_csvfile_locale_nz):
+    reader = csv_reader(
+        lsetwatch_csvfile_locale_nz, date_format="%d/%m/%Y", locale="en_NZ.utf8"
+    )
+    item: LsetwatchRow = next(reader)
+    assert item.purc_date == date(2023, 6, 6)
+    assert item.purc_price == 437.71
+    assert item.purc_shipc == 1.1
+    assert item.purc_costs == 0.9
+
+
+def test_read_locale_de(lsetwatch_csvfile_locale_de):
+    reader = csv_reader(
+        lsetwatch_csvfile_locale_de, date_format="%d.%m.%Y", locale="de_DE.utf8"
+    )
+    item: LsetwatchRow = next(reader)
+    assert item.purc_date == date(2023, 6, 6)
+    assert item.purc_price == 437.71
+    assert item.purc_shipc == 1.1
+    assert item.purc_costs == 0.9
 
 
 def test_read_template_free(lsetwatch_csvfile):
@@ -441,4 +487,64 @@ def test_write_escape(temp_file, now):
     assert (
         lines[0]
         == f"{int(now.timestamp())};1;1;0;;0;;;;;;;;;;;1;;;;;;;;;1;;;;;;;0;0;0;;;note with \a34\a59\a34;;;;"
+    )
+
+
+def test_write_locale_nz(temp_file, now):
+    items = [
+        LsetwatchRow(
+            last_edit=now,
+            number="1",
+            version="1",
+            purc_date=date(2023, 6, 1),
+            purc_price=437.71,
+            purc_shipc=1.1,
+            purc_costs=0.9,
+            sell_price=437.71,
+            sell_shipc=1.1,
+            sell_costs=0.9,
+            vip_points_get=12.33,
+            vip_points_sub=21.33,
+            cashback=9.3,
+            sales_value=437.71,
+        )
+    ]
+    writer = csv_writer(temp_file, items, date_format="%d/%m/%Y", locale="en_NZ.utf8")
+    writer.write(skip_header=True)
+
+    lines = temp_file.getvalue().split("\r\n")
+    assert len(lines) == 2  # one empty line
+    assert (
+        lines[0]
+        == f"{int(now.timestamp())};1;1;0;;0;;;;;;01/06/2023;;437.71;1.1;0.9;1;;;;;;437.71;1.1;0.9;1;12.33;21.33;9.3;;;;0;0;0;437.71;;;;;;"
+    )
+
+
+def test_write_locale_de(temp_file, now):
+    items = [
+        LsetwatchRow(
+            last_edit=now,
+            number="1",
+            version="1",
+            purc_date=date(2023, 6, 1),
+            purc_price=437.71,
+            purc_shipc=1.1,
+            purc_costs=0.9,
+            sell_price=437.71,
+            sell_shipc=1.1,
+            sell_costs=0.9,
+            vip_points_get=12.33,
+            vip_points_sub=21.33,
+            cashback=9.3,
+            sales_value=437.71,
+        )
+    ]
+    writer = csv_writer(temp_file, items, date_format="%d.%m.%Y", locale="de_DE.utf8")
+    writer.write(skip_header=True)
+
+    lines = temp_file.getvalue().split("\r\n")
+    assert len(lines) == 2  # one empty line
+    assert (
+        lines[0]
+        == f"{int(now.timestamp())};1;1;0;;0;;;;;;01.06.2023;;437,71;1,1;0,9;1;;;;;;437,71;1,1;0,9;1;12,33;21,33;9,3;;;;0;0;0;437,71;;;;;;"
     )

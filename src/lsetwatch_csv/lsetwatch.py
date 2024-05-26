@@ -4,6 +4,7 @@ import csv
 import dataclasses
 import locale
 import re
+from contextlib import contextmanager
 from datetime import date, datetime, timezone
 from enum import IntEnum
 from typing import Annotated, Optional
@@ -19,6 +20,26 @@ DEFAULT_LSET_LOCALE = (
 LSET_STRING_ENCODING = "lsetwatch"
 LSET_LIST_ENCODING = "psv"
 LSET_CSV_DIALECT = "lsetwatch"
+
+
+# Locale support
+@contextmanager
+def localized(loc: str):
+    locale.setlocale(locale.LC_ALL, loc)
+    try:
+        yield
+    finally:
+        locale.setlocale(locale.LC_ALL, "")
+
+
+def parse_numeric(val: str, loc=locale.getlocale()) -> float:
+    with localized(loc):
+        return locale.atof(val)
+
+
+def format_numeric(val: float, loc=locale.getlocale()) -> str:
+    with localized(loc):
+        return locale.str(val)
 
 
 # Custom encodings
@@ -263,6 +284,7 @@ class LsetwatchRow:
 
 
 def csv_reader(csvfile, **kwargs):
+    loc = kwargs.pop("locale", DEFAULT_LSET_LOCALE)
     date_format = kwargs.pop("date_format", DEFAULT_LSET_DATE_FORMAT)
 
     reader = DataclassReader(
@@ -287,12 +309,26 @@ def csv_reader(csvfile, **kwargs):
     ]:
         reader.type_hints[field] = int
 
-    # TODO: locale support for values
-    # reader.type_hints["purc_shipc"] = lambda v: locale.atof
+    # locale support for decimal values
+    for field in [
+        "purc_price",
+        "purc_shipc",
+        "purc_costs",
+        "sell_price",
+        "sell_shipc",
+        "sell_costs",
+        "vip_points_get",
+        "vip_points_sub",
+        "cashback",
+        "sales_value",
+    ]:
+        reader.type_hints[field] = lambda v: parse_numeric(v, loc)
+
     return reader
 
 
 def csv_writer(csvfile, data, **kwargs):
+    loc = kwargs.pop("locale", DEFAULT_LSET_LOCALE)
     date_format = kwargs.pop("date_format", DEFAULT_LSET_DATE_FORMAT)
 
     def encode_string(string: str | None) -> str | None:
@@ -306,6 +342,9 @@ def csv_writer(csvfile, data, **kwargs):
     def encode_date(date: date | None) -> str | None:
         return date.strftime(date_format) if date is not None else None
 
+    def encode_number(number: float | None) -> str | None:
+        return format_numeric(number, loc) if number is not None else None
+
     def encode_item(item: LsetwatchRow) -> LsetwatchRow:
         return dataclasses.replace(
             item,
@@ -317,6 +356,16 @@ def csv_writer(csvfile, data, **kwargs):
             purc_date=encode_date(item.purc_date),
             sell_date=encode_date(item.sell_date),
             reminder_date=encode_date(item.reminder_date),
+            purc_price=encode_number(item.purc_price),
+            purc_shipc=encode_number(item.purc_shipc),
+            purc_costs=encode_number(item.purc_costs),
+            sell_price=encode_number(item.sell_price),
+            sell_shipc=encode_number(item.sell_shipc),
+            sell_costs=encode_number(item.sell_costs),
+            vip_points_get=encode_number(item.vip_points_get),
+            vip_points_sub=encode_number(item.vip_points_sub),
+            cashback=encode_number(item.cashback),
+            sales_value=encode_number(item.sales_value),
         )
 
     encoded_data = [encode_item(i) for i in data]
