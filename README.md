@@ -19,7 +19,7 @@ The CSV specification used by Lsetwatch is implemented with a custom [CSV dialec
 Values are escaped within the application itself. The value encoding used by Lsetwatch is implemented with custom [stateless Codecs](https://docs.python.org/3/library/codecs.html#codec-base-classes):
 
 * The Bell character `\a` is used for escaping reserved CSV characters. This is implemented in `BellEscapedAsciiStringCodec`.
-* Lists are represented as pipe-separated values within a field. This is implemented in `BellEscapedAsciiStringCodec`. Note that as of Lsetwatch 1.17 values within lists don't seem to be escaped correctly, and can cause invalid outputs (e.g. using the pipe character `|` within values in lists).
+* Lists are represented as pipe-separated values within a field. This is implemented in `PipeSeparatedListCodec`. Note that as of Lsetwatch 1.17 values within lists don't seem to be escaped correctly, and can cause invalid outputs (e.g. using the pipe character `|` within values in lists).
 
 ### Locales, date and number format
 
