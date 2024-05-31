@@ -10,7 +10,6 @@ from enum import IntEnum
 from typing import Annotated, Optional
 
 from dataclass_csv import DataclassReader, DataclassWriter, dateformat
-from pydantic import Field
 
 DEFAULT_LSET_DATE_FORMAT = "%d/%m/%Y"
 DEFAULT_LSET_LOCALE = (

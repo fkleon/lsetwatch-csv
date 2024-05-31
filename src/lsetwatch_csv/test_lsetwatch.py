@@ -20,7 +20,6 @@ from lsetwatch_csv.lsetwatch import (
     csv_reader,
     csv_writer,
 )
-from pydantic import Field
 
 
 @pytest.fixture

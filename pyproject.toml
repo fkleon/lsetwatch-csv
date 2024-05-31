@@ -17,7 +17,6 @@ classifiers = [
 
 dependencies = [
     "dataclass-csv ~= 1.4",
-    "pydantic ~= 2.7",
     "setuptools; python_version > '3.11'",
 ]
 
