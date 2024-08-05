@@ -1,7 +1,7 @@
 export PATH := .venv/bin:$(PATH)
 
 .venv: pyproject.toml  ## Create the python virtual environment.
-	python3 -m venv --clear .venv
+	/usr/bin/python3 -m venv --clear --upgrade-deps .venv
 	pip install -e '.[dev]'
 
 .PHONY: lint
