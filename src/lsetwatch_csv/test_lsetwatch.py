@@ -8,6 +8,7 @@ from typing import Annotated, Optional
 
 import pytest
 from dataclass_csv import DataclassReader, DataclassWriter, dateformat
+
 from lsetwatch_csv.lsetwatch import (
     BellEscapedAsciiString,
     LsetAccessoryStatus,
